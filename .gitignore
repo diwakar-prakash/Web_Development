@@ -1,0 +1,9 @@
+# System / Editor files
+.DS_Store
+*.log
+
+# Node stuff (just in case something leaks upward)
+node_modules/
+
+# Environment files
+.env
