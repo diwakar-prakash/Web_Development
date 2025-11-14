@@ -17,4 +17,4 @@ const userSchema = new mongoose.Schema({
     }
 })
 
-export default mongoose.model('users_in_the_expense-tracker-application', userSchema);
+export default mongoose.model('Users_in_the_expense-tracker-application', userSchema);
