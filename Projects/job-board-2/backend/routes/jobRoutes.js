@@ -131,4 +131,56 @@ router.delete('/:id', authMiddle, async ( req, res ) => {
 })
 
 
+// now we are going to add the filter search part of it, this is a good thing as i learned it 
+// and now i am going to implement it brother
+
+router.get('/search/all', async ( req , res ) => {
+    const { search, jobType, skills, location, minSalary, maxSalary } = req.params;
+
+    const query = {};
+
+    if(search) {
+        query.$or = [
+            { title : new RegExp(search, "i")},
+            { company : new RegExp(search, "i")},
+            { description : new RegExp(search, "i")}
+        ]
+    }
+
+    if(location) {
+        query.location = new RegExp(location, "i");
+    }
+
+    if(jobType) {
+        query.jobType = jobType;
+    }
+
+    if(skills) {
+        query.skills = new RegExp(skills, "i");
+    }
+
+    if(minSalary || maxSalary) {
+        query.salary = {};
+        if(minSalary) {
+            query.salary.$gte = Number(minSalary);
+        }
+        if(maxSalary) {
+            query.salary.$lte = Number(maxSalary);
+        }
+    }
+
+    try {
+        const queryGenerate = await Job.find(query);
+        res.status(200).json({
+            queryGenerate
+        })
+    }
+    catch ( err ) {
+        res.status(404).json({
+            message : err.message
+        })
+    }
+})
+
+
 export default router;
