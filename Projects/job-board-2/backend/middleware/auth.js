@@ -4,7 +4,7 @@ const authMiddle = (req, res, next) => {
     const token = req.headers.authorization;
 
     if(!token) {
-        return res.this.status(401).json({
+        return res.status(401).json({
             message : "token not present. Please try to login again"
         })
     }

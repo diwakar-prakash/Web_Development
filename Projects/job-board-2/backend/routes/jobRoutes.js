@@ -1,5 +1,5 @@
 import express from 'express';
-
+import upload from '../middleware/upload.js';
 import Job from '../models/Job.js';
 
 import authMiddle from '../middleware/auth.js';
@@ -15,7 +15,7 @@ const router = express.Router();
 // 4. PUT, meaning update the job
 // 5. DELETE, meaning that you delete the job.
 
-router.post("/post", authMiddle, async ( req , res ) => {
+router.post("/post", authMiddle, upload.single("logo"), async ( req , res ) => {
     try {
         const { title, company, jobType, location, salary, skills, description } = req.body;
 
@@ -27,6 +27,7 @@ router.post("/post", authMiddle, async ( req , res ) => {
             salary,
             skills : skills.split(','),
             description,
+            logo : req.file ? req.file.path : null,
             postedBy : req.user.id
         });
 
@@ -70,7 +71,7 @@ router.get("/:id", async(req , res) => {
                 message : "The job is not there which you are trying to find."
             })
         }
-        res.status(200).json(jobs)
+        res.status(200).json(job)
     }
     catch ( err ) {
         res.status(404).json({
@@ -78,3 +79,56 @@ router.get("/:id", async(req , res) => {
         })
     }
 })
+
+
+router.put('/:id', authMiddle, async ( req , res ) => {
+    try {
+        const updatedJob = await Job.findOneAndUpdate(
+            {_id : req.params.id , postedBy : req.user.id},
+            req.body,
+            { new : true, runValidators : true}
+        );
+        
+        if(!updatedJob) {
+            return res.status(401).json({ message : "Not authorized or job not found"});
+        }
+
+        res.status(200).json({
+            message : "The job has been updated.",
+            updatedJob
+        })
+    }
+    catch ( err ) {
+        res.status(404).json({
+            message : "The job was not updated due to some error"
+        })
+    }
+})
+
+
+// ab jo last wala hai that is going to be is the delete router
+
+router.delete('/:id', authMiddle, async ( req, res ) => {
+    try {
+        const deleteJob = await Job.findOneAndDelete({
+            _id : req.params.id,
+            postedBy : req.user.id
+        })
+
+        if(!deleteJob) {
+            return res.status(401).json({
+                message : "Not authorized or job not found"
+            })
+        }
+
+        res.status(200).json({ message : "JOB DELETED" });
+    }
+    catch ( err ) {
+        res.status(404).json({
+            message : "There has been some problem in deleting the job. Please try again."
+        })
+    }
+})
+
+
+export default router;
