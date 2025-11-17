@@ -15,7 +15,7 @@ const productSchema = new mongoose.Schema({
     },
     category : {
         type : String,
-        required : true
+        default : "General"
     },
     image : {
         type : String
@@ -25,6 +25,10 @@ const productSchema = new mongoose.Schema({
     },
     createdBy : {
         type : mongoose.Schema.Types.ObjectId,
-        ref : ""
+        ref : "Users_in_e-commerce-2_application",
     }
-})
+},
+{ timestamps : true }
+)
+
+export default mongoose.model("Products_in_e-commerce-2_application", productSchema);
