@@ -12,13 +12,14 @@ const userSchema = new mongoose.Schema({
         unique : true
     },
     password : {
-        type : String
+        type : String,
+        required : true
     },
     role : {
         type : String,
         enum : ["user", "admin"],
         required : true
     }
-})
+}, { timestamps : true })
 
 export default mongoose.model("Users_in_e-commerce-2_application", userSchema);
