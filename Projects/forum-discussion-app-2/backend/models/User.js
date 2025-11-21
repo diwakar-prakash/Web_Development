@@ -1,6 +1,6 @@
 import mongoose from "mongoose";
 
-const userSchmea = new mongoose.Schema({
+const userSchema = new mongoose.Schema({
     username : {
         type : String,
         required : true,
@@ -17,4 +17,4 @@ const userSchmea = new mongoose.Schema({
     }
 })
 
-export default mongoose.model("user_in_forum-discussion-app", userSchmea);
+export default mongoose.model("user_in_forum-discussion-app", userSchema);

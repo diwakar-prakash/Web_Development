@@ -5,6 +5,7 @@ import uploadMiddle from "../middleware/upload.js";
 
 import User from "../models/User.js";
 import Post from "../models/Post.js";
+import Comment from "../models/Comment.js";
 
 
 // here we are going to create some routes for the posting purpose
@@ -59,22 +60,32 @@ router.get('/', async ( req, res ) => {
 })
 
 
-// now we are going to create a route so that if the user, has posted some shit, he can see it
+// here you are going to get a post and it's comments by entering it's postId
 
-router.get('/myposts', authMiddle, async ( req, res ) => {
+router.get('/:postId', async( req , res ) => {
     try {
-        const allPosts = await Post.find({ author : req.user.id }).populate("author", "username email");
+        const findIfPost = await Post.findById(req.params.postId).populate("author", "username");
+
+        if(!findIfPost) {
+            return res.status(404).json({
+                message : "The post doesn't exits"
+            })
+        }
+
+        const findCommentsOnThePost = await Comment.find({ post : req.params.postId }).populate("user", "username");
+
         res.status(200).json({
-            message : "Here are all your posts",
-            allPosts
+            findIfPost,
+            comments : findCommentsOnThePost
         })
     }
     catch ( err ) {
         res.status(404).json({
-            message : "Some error came while getting your posts."
+            message : "Error in accessing the post"
         })
     }
 })
+
 
 // if a user wants to delete some of his posts, then this is the following that is going to happen
 

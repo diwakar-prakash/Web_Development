@@ -8,7 +8,7 @@ const storage = multer.diskStorage({
     }
 })
 
-const fileType = (req, file, cb) => {
+const fileFilter = (req, file, cb) => {
     const allowed = /jpeg|png|pdf|jpg/;
     const current = path.extname(file.originalname).toLowerCase();
     if(allowed.test(current)) {
@@ -19,6 +19,6 @@ const fileType = (req, file, cb) => {
     }
 }
 
-const uploadMiddle = multer({ storage , fileType });
+const uploadMiddle = multer({ storage , fileFilter });
 
 export default uploadMiddle;
