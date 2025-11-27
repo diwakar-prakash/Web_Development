@@ -1,0 +1,73 @@
+services: 
+
+  auth-service:
+    build:  ./auth-service
+    depends_on:
+      - mongo
+    networks: 
+      - fitness_network
+    restart: unless-stopped
+    env_file:
+      - ./auth-service/.env
+
+
+  analytics-service:
+    build:  ./analytics-service
+    networks:
+      - fitness_network
+    restart: unless-stopped
+    env_file:
+      - ./analytics-service/.env
+    depends_on:
+      - mongo
+      - redis
+
+  
+  fitness-service:
+    build: ./fitness-service
+    networks:
+      - fitness_network
+    restart: unless-stopped
+    env_file:
+      - ./fitness-service/.env
+    depends_on:
+      - mongo
+
+  
+  mongo:
+    image: mongo:6
+    networks:
+      - fitness_network
+    restart: unless-stopped
+    volumes:
+      - mongo-data:/data/db
+    environment:
+      MONGO_INITDB_DATABASE: fitness-auth
+
+
+  redis:
+    image: redis:7-alpine
+    restart: unless-stopped
+    networks:
+      - fitness_network
+
+
+  nginx:
+    image:  nginx:alpine
+    networks:
+      - fitness_network
+    ports:
+      - "80:80"
+    volumes:
+      - ./nginx/nginx.conf:/etc/nginx/nginx.conf
+    depends_on:
+      - analytics-service
+      - auth-service
+      - fitness-service
+
+
+networks:
+  fitness_network:
+
+volumes:
+  mongo-data:

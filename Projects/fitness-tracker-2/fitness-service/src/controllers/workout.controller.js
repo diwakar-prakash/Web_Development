@@ -5,6 +5,12 @@ export const createWorkout = async ( req , res , next ) => {
     try {
         const { type, duration, caloriesBurned, date } = req.body;
 
+        if(!type || !duration || !caloriesBurned) {
+            return res.status(401).json({
+                message : "All the fields are required"
+            })
+        }
+
         const creatework = await Workout.create({
             userId : req.user.id,
             type,
