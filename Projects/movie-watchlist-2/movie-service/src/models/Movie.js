@@ -9,7 +9,8 @@ const movieSchema = new mongoose.Schema({
         type : String
     },
     genre : {
-        type : String
+        type : String,
+        required : true
     },
     releaseYear : {
         type : Number

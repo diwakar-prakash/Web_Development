@@ -6,7 +6,6 @@ import app from './src/app.js'
 dotenv.config();
 
 app.use(cors());
-app.use()
 
 const PORT = process.env.PORT || 4000;
 
