@@ -1,0 +1,64 @@
+services:
+  auth-service:
+    build : ./auth-service
+    depends_on : 
+      - mongo
+    networks:
+      - movie_network
+    restart : unless-stopped
+    env_file:
+      - ./auth-service/.env
+
+
+  movie-service :
+    build : ./movie-service
+    restart : unless-stopped
+    env_file:
+      - ./movie-service/.env
+    networks:
+      - movie_network
+    depends_on : 
+      - mongo
+    volumes:
+      - ./movie-service/uploads/posters:/app/uploads/posters
+
+  
+  user-service:
+    build : ./user-service
+    restart: unless-stopped
+    networks :
+      - movie_network
+    env_file:
+      - ./user-service/.env
+    depends_on:
+      - mongo
+
+  
+  nginx :
+    image : nginx:alpine
+    volumes:
+      - ./nginx/nginx.conf:/etc/nginx/nginx.conf
+      - ./movie-service/uploads/posters:/app/uploads/posters
+    depends_on:
+      - user-service
+      - movie-service
+      - auth-service
+    networks:
+      - movie_network
+    ports:
+      - "80:80"
+  
+
+  mongo:
+    image : mongo:5
+    restart : always
+    networks:
+      - movie_network
+    volumes:
+      - mongo1-data:/data/db
+
+networks:
+  movie_network:
+
+volumes:
+  mongo1-data:

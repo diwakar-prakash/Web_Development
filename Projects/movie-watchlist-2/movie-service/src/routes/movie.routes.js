@@ -7,7 +7,7 @@ import { postMovie, updateMovie, getMovie, deleteMovie } from "../controllers/mo
 
 const router = Router();
 
-router.post('/add', authMiddle, adminMiddle, upload.single("image"), postMovie);
+router.post('/add', authMiddle, adminMiddle, upload.single("poster"), postMovie);
 
 router.put('/update/:id', authMiddle, adminMiddle, updateMovie);
 
