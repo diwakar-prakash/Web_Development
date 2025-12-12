@@ -8,9 +8,14 @@ const roomEvents = (io, socket) => {
 
         socket.to(room).emit("user-joined", socket.user.username);
 
-        const res = await axios.get(`${process.env.BASE}/messages/room/${room}`);
+        try {
+            const res = await axios.get(`${process.env.BASE}/messages/room/${room}`);
+            socket.emit('room-history', res.data.messages);
+        } catch (err) {
+            console.log("Failed fetching room history", err.message);
+            socket.emit('room-history', []); 
+        }
 
-        socket.emit('room-history', res.data.messages);
         
     });
 

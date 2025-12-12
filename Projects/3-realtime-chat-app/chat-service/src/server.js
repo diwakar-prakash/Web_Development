@@ -9,6 +9,12 @@ dotenv.config();
 const app = express();
 const server = http.createServer(app);
 
+app.get("/", (req, res) => {
+    res.status(200).json({
+        message : "Chat service OK"
+    })
+});
+
 const io = new Server(server, {
     cors : { origin : "*"},
 })
