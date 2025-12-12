@@ -8,7 +8,7 @@ const roomEvents = (io, socket) => {
 
         socket.to(room).emit("user-joined", socket.user.username);
 
-        const res = axios.get(`${process.env.BASE}/messages/room/${room}`);
+        const res = await axios.get(`${process.env.BASE}/messages/room/${room}`);
 
         socket.emit('room-history', res.data.messages);
         

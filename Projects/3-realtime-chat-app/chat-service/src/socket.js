@@ -1,13 +1,15 @@
 
 import authSocket from "./middleware/authSocket.js";
-
-
+import roomEvents from "./events/roomEvents.js";
+import dmEvents from "./events/dmEvents.js";
+import typingEvents from "./events/typingEvents.js";
 
 const initSocket = (io) => {
     io.use(authSocket);
 
     io.on("connection", (socket) => {
         console.log(`User has been connected ${socket.user.username}`);
+        socket.join(socket.user.id);
 
         roomEvents(io, socket);
         dmEvents(io, socket);
