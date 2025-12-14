@@ -19,9 +19,12 @@ const io = new Server(server, {
     cors : { origin : "*"},
 })
 
+// socket connection 
 initSocket(io);
 
 const PORT = process.env.PORT || 3002;
 server.listen(PORT, () => {
     console.log(`Server of chat-service is up baby at port ${PORT}`);
 })
+
+
