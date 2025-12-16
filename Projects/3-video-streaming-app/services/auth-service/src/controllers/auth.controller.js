@@ -84,3 +84,26 @@ export const logIn = async ( req , res ) => {
     }
 }
 
+// now we are going to make a route for verifying the token
+
+export const verify = async ( req , res ) => {
+    try {
+        const token = req.headers.authorization;
+        if(!token) {
+            return res.status(400).json({ valid: false })
+        }
+
+        const decoded = await jwt.verify(token, process.env.JWT_SECRET);
+
+        res.json({
+            valid: true,
+            userId : decoded.userId,
+            role: decoded.role
+        });
+    }
+    catch ( err ) {
+        res.status(401).json({
+            valid : false
+        })
+    }
+}
