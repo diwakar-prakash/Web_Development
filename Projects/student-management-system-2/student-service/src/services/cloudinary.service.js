@@ -26,3 +26,5 @@ const uploadToCloudinary = async (buffer, folder = "students") => {
 };
 
 export default uploadToCloudinary;
+
+
