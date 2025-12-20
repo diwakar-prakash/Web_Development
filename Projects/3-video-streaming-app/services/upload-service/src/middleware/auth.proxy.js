@@ -26,7 +26,7 @@ const authMiddle = async ( req , res , next ) => {
 
         req.user = check.data;
         next();
-    }
+    } 
     catch ( err ) {
         return res.status(500).json({
             message : "Authentication Failed in the Upload Service"
