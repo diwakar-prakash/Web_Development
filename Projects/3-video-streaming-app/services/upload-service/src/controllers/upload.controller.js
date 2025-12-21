@@ -1,14 +1,16 @@
-import { uploadToCloudinary } from "../services/upload.service.js";
-import { validateVideoFile } from "../utils/file.validator.js";
-import axios from "axios";
+import { uploadToCloudinary } from '../services/upload.service.js';
+import { validateVideoFile } from '../utils/file.validator.js';
+import axios from 'axios';
 
-export const uploadVideo = async (req, res) => {
+export const uploadVideo = async ( req , res ) => {
   try {
-    const { videoId } = req.params;
+    const {videoId} = req.params;
     const file = req.file;
 
-    if (!videoId) {
-      return res.status(400).json({ message: "VideoId missing" });
+    if(!videoId) {
+      return res.status(400).json({
+        message : "VideoId missing"
+      })
     }
 
     validateVideoFile(file);
@@ -17,7 +19,7 @@ export const uploadVideo = async (req, res) => {
       `${process.env.VIDEO_SERVICE_URL}/video/videos/${videoId}`,
       {
         headers: {
-          Authorization: req.headers.authorization
+          Authorization : req.headers.authorization
         }
       }
     );
@@ -33,12 +35,13 @@ export const uploadVideo = async (req, res) => {
     });
 
     res.status(201).json({
-      message: "Video uploaded successfully",
+      message : "Video uploaded successfully",
       rawVideoUrl: result.secure_url
-    });
-  } catch (err) {
-    res.status(500).json({
-      message: err.message || "Upload failed"
-    });
+    })
   }
-};
+  catch ( err ) {
+    res.status(500).json({
+      message : err.message || "Upload Failed"
+    })
+  }
+}
