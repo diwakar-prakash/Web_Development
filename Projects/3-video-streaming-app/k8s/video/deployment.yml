@@ -1,0 +1,24 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: video-service
+  namespace: video-platform
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: video-service
+  template:
+    metadata:
+      labels:
+        app: video-service
+    spec:
+      containers:
+        - name: video
+          image: diwakar5041/video-service:1.0
+          ports:
+            - containerPort: 3005
+          envFrom:
+            - configMapRef:
+                name: video-config
+

@@ -1,0 +1,7 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: processing-config
+  namespace: video-platform
+data:
+  NODE_ENV: "production"

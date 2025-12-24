@@ -1,0 +1,7 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: video-config
+  namespace: video-platform
+data:
+  PORT: "3005"
