@@ -15,9 +15,14 @@ const userSchema = new mongoose.Schema({
         default : "local"
     },
     providerId: {
-
+        type : String
     },
     role: {
-
+        type : String,
+        default : "USER"
     }
-})
+},
+{timestamps : true}
+)
+
+export default mongoose.model("USER", userSchema);
